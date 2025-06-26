@@ -1,0 +1,98 @@
+erDiagram
+    expansions {
+        int id PK
+        string name
+        string release_date
+        string description
+        string version
+    }
+    cities {
+        int id PK
+        string name
+        string region
+        int expansion_id FK
+        string description
+    }
+    locations {
+        int id PK
+        string name
+        string type
+        string region
+        int expansion_id FK
+        string description
+    }
+    npcs {
+        int id PK
+        string name
+        string type
+        int location_id FK
+        float x
+        float y
+        string description
+    }
+    items {
+        int id PK
+        string name
+        string description
+        int expansion_id FK
+        string item_type
+        string rarity
+        int level_requirement
+    }
+    item_sources {
+        int id PK
+        int item_id FK
+        string source_type
+        int source_id
+        int location_id FK
+        float x
+        float y
+        string details
+    }
+    recipes {
+        int id PK
+        int item_id FK
+        string job
+        int required_level
+    }
+    recipe_ingredients {
+        int recipe_id FK
+        int ingredient_item_id FK
+        int quantity
+        string method
+    }
+    jobs {
+        string name PK
+        string type
+    }
+    aetherytes {
+        int id PK
+        string name
+        int location_id FK
+        string description
+    }
+    cardinal_directions {
+        string code PK
+        string name
+    }
+    item_locations {
+        int item_id FK
+        int location_id FK
+        int aetheryte_id FK
+        string cardinal_direction
+        string details
+    }
+
+    cities ||--o{ expansions : "expansion_id"
+    locations ||--o{ expansions : "expansion_id"
+    npcs ||--o{ locations : "location_id"
+    items ||--o{ expansions : "expansion_id"
+    item_sources ||--o{ items : "item_id"
+    item_sources ||--o{ locations : "location_id"
+    recipes ||--o{ items : "item_id"
+    recipe_ingredients ||--o{ recipes : "recipe_id"
+    recipe_ingredients ||--o{ items : "ingredient_item_id"
+    aetherytes ||--o{ locations : "location_id"
+    item_locations ||--o{ items : "item_id"
+    item_locations ||--o{ locations : "location_id"
+    item_locations ||--o{ aetherytes : "aetheryte_id"
