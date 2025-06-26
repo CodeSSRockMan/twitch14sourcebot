@@ -14,16 +14,32 @@ Run with:
 """
 
 import os
+import json
 from twitchio.ext import commands
 
-# Read environment variables --------------------------------------------------
-try:
-    TOKEN = os.environ["TWITCH_OAUTH_TOKEN"]
-    BOT_NICK = os.environ["TWITCH_BOT_NICK"]
-    CHANNEL = os.environ["TWITCH_CHANNEL"]
-except KeyError as exc:
-    missing = exc.args[0]
-    raise SystemExit(f"Missing required environment variable: {missing}") from None
+# Read environment variables or secrets.json -----------------------------------
+def get_secrets():
+    # Try environment variables first
+    try:
+        token = os.environ["TWITCH_OAUTH_TOKEN"]
+        bot_nick = os.environ["TWITCH_BOT_NICK"]
+        channel = os.environ["TWITCH_CHANNEL"]
+        prefix = os.environ.get("TWITCH_PREFIX", "f!?")
+        return token, bot_nick, channel, prefix
+    except KeyError:
+        # Fallback to secrets.json
+        try:
+            with open("secrets.json", "r", encoding="utf-8") as f:
+                secrets = json.load(f)
+            token = secrets["twitch_token"]
+            bot_nick = secrets["bot_nick"]
+            channel = secrets["channel"]
+            prefix = secrets.get("prefix", "f!?")
+            return token, bot_nick, channel, prefix
+        except Exception as exc:
+            raise SystemExit(f"Missing required credentials: {exc}") from None
+
+TOKEN, BOT_NICK, CHANNEL, PREFIX = get_secrets()
 
 
 class Bot(commands.Bot):
@@ -32,7 +48,7 @@ class Bot(commands.Bot):
     def __init__(self) -> None:
         super().__init__(
             token=TOKEN,
-            prefix="!",
+            prefix=PREFIX,
             initial_channels=[CHANNEL],
             nick=BOT_NICK,
         )

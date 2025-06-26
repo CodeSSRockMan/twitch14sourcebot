@@ -1,3 +1,7 @@
 # Add your project dependencies here
 # Example:
 # twitchio==2.4.0
+twitchio
+fastapi
+uvicorn
+aiosqlite
