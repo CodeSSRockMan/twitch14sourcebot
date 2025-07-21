@@ -5,3 +5,4 @@ twitchio
 fastapi
 uvicorn
 aiosqlite
+requests
