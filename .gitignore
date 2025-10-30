@@ -72,3 +72,12 @@ secrets.json
 
 # SQLite DB
 *.db
+
+# Sensitive files
+secrets.json
+*.pem
+*.key
+*.crt
+.env
+terraform.tfvars
+jenkins_home/

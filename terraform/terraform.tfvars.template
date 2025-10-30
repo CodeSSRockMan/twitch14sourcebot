@@ -1,0 +1,8 @@
+# Example terraform.tfvars
+aws_region = "us-east-1"
+ami_id = "ami-0c55b159cbfafe1f0" # Example, update as needed
+instance_type = "t2.micro"
+key_name = "your-key-name"
+s3_bucket_name = "twitch14sourcebot-artifacts-example"
+vpc_cidr = "10.0.0.0/16"
+public_subnet_cidr = "10.0.1.0/24"

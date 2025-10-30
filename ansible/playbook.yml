@@ -1,0 +1,36 @@
+---
+# Ansible playbook to set up the project environment and run the app
+- hosts: all
+  become: yes
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - python3
+          - python3-pip
+          - python3-venv
+          - git
+        state: present
+        update_cache: yes
+
+    - name: Clone the repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: /opt/twitch14sourcebot
+        version: main
+
+    - name: Set up Python venv
+      command: python3 -m venv /opt/twitch14sourcebot/venv
+      args:
+        creates: /opt/twitch14sourcebot/venv
+
+    - name: Install requirements
+      command: /opt/twitch14sourcebot/venv/bin/pip install -r /opt/twitch14sourcebot/requirements.txt
+
+    - name: Run the app
+      shell: |
+        nohup /opt/twitch14sourcebot/venv/bin/python /opt/twitch14sourcebot/main.py > /opt/twitch14sourcebot/app.log 2>&1 &
+      args:
+        chdir: /opt/twitch14sourcebot
