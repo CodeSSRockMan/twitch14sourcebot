@@ -81,3 +81,4 @@ secrets.json
 .env
 terraform.tfvars
 jenkins_home/
+.DS_Store
